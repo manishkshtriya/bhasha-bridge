@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: bhasha-bridge
+    runtime: node
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: GNANI_KEY
+        sync: false
+      - key: GEMINI_KEY
+        sync: false

@@ -1,10 +1,12 @@
 {
-  "name": "server",
+  "name": "bhasha-bridge",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Live call translator: speak Kannada, they hear Hindi. Built on Gnani Prisma + Timbre.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +15,10 @@
   "dependencies": {
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
-    "multer": "^2.5.0"
+    "multer": "^2.5.0",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#14131a" />
+    <title>Bhasha Bridge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;600;800&family=Anek+Kannada:wght@400;600;800&family=Anek+Latin:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2716%27 height=%2732%27 fill=%27%23F2B705%27/%3E%3Crect x=%2716%27 width=%2716%27 height=%2732%27 fill=%27%233B3FA8%27/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Join -->
+    <main id="join" class="screen">
+      <header class="brand">
+        <h1>Bhasha<br />Bridge</h1>
+        <p class="hello"><span class="kn">ನೀವು ಕನ್ನಡದಲ್ಲಿ ಮಾತಾಡಿ</span><span class="arrow">⟶</span><span class="hi">वो हिन्दी में सुनें</span></p>
+        <p class="lede">A live call translator. Each person speaks their own language and hears the other in theirs.</p>
+      </header>
+
+      <form id="joinForm" class="card" autocomplete="off">
+        <label for="name">Your name</label>
+        <input id="name" maxlength="24" placeholder="Manish" required />
+
+        <span class="label" id="langLabel">I speak</span>
+        <div class="seg" role="radiogroup" aria-labelledby="langLabel">
+          <button type="button" role="radio" data-lang="kn-IN" class="lang kn on" aria-checked="true">ಕನ್ನಡ<small>Kannada</small></button>
+          <button type="button" role="radio" data-lang="hi-IN" class="lang hi" aria-checked="false">हिन्दी<small>Hindi</small></button>
+        </div>
+
+        <span class="label" id="voiceLabel">My translated voice</span>
+        <div class="seg small" role="radiogroup" aria-labelledby="voiceLabel">
+          <button type="button" role="radio" data-gender="male" class="gender on" aria-checked="true">Male</button>
+          <button type="button" role="radio" data-gender="female" class="gender" aria-checked="false">Female</button>
+        </div>
+
+        <label for="room">Room code <small>(leave empty to start a new call)</small></label>
+        <input id="room" maxlength="8" placeholder="e.g. K7MQ2" autocapitalize="characters" />
+
+        <button class="primary" type="submit">Start the call</button>
+        <p class="fine">Records only while you hold the talk button.</p>
+      </form>
+    </main>
+
+    <!-- Call -->
+    <main id="call" class="screen" hidden>
+      <header class="callbar">
+        <div>
+          <span class="roomlabel">Room</span>
+          <strong id="roomCode">—</strong>
+        </div>
+        <button id="share" class="ghost" type="button">Invite</button>
+      </header>
+      <ul id="peers" class="peers" aria-label="People in this call"></ul>
+
+      <section id="log" class="log" aria-live="polite">
+        <p class="empty" id="empty">Share the room code. When the other person joins, hold the button and speak.</p>
+      </section>
+
+      <p id="status" class="status" role="status"></p>
+
+      <footer class="talk">
+        <button id="talk" class="talkbtn" type="button" aria-label="Hold to talk">
+          <span class="ring" aria-hidden="true"></span>
+          <span class="label" id="talkLabel">Hold to talk</span>
+          <span class="timer" id="timer" aria-hidden="true"></span>
+        </button>
+      </footer>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
