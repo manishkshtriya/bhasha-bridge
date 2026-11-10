@@ -1,0 +1,26 @@
+node server.js
+cd ~/bhasha-bridge/server
+curl -F audio=@$HOME/kn.wav localhost:5000/stt
+import express from "express";
+import multer from "multer";
+import "dotenv/config";
+
+const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.post("/stt", upload.single("audio"), async (req, res) => {
+  const form = new FormData();
+  form.append("audio_file", new Blob([req.file.buffer]), "clip.wav");
+  form.append("model", "prisma-v3.0");
+  form.append("language_code", "kn-IN,hi-IN,en-IN");
+
+  const r = await fetch("https://api.vachana.ai/stt/v3", {
+    method: "POST",
+    headers: { "X-API-Key-ID": process.env.GNANI_KEY },
+    body: form,
+  });
+  res.json(await r.json());
+});
+
+app.listen(5000, () => console.log("Server on 5000"));
+
