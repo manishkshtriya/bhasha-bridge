@@ -12,6 +12,7 @@ import { createServer } from 'node:http';
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { WebSocketServer } from 'ws';
+import QRCode from 'qrcode';
 import { LANGUAGES, speak, transcribe } from './lib/gnani.js';
 import { translate } from './lib/translate.js';
 import { Rooms, newRoomCode } from './lib/rooms.js';
@@ -26,6 +27,30 @@ export function createApp() {
   app.use(express.static(fileURLToPath(new URL('./public', import.meta.url))));
   app.get('/api/languages', (_req, res) => res.json(LANGUAGES));
   app.get('/api/new-room', (_req, res) => res.json({ code: newRoomCode() }));
+  app.get('/api/qr', async (req, res) => {
+    const text = String(req.query.text || '').slice(0, 300);
+    if (!text) return res.status(400).end();
+    const svg = await QRCode.toString(text, { type: 'svg', margin: 0, color: { dark: '#0e0d14', light: '#0000' } });
+    res.type('image/svg+xml').send(svg);
+  });
+
+  // Face-to-face mode: one phone, two people. One clip in, the translated voice back.
+  app.post('/api/turn', express.raw({ type: () => true, limit: MAX_CLIP_BYTES }), async (req, res) => {
+    const from = LANGUAGES[req.query.from] ? req.query.from : null;
+    const to = LANGUAGES[req.query.to] ? req.query.to : null;
+    if (!from || !to || !req.body?.length) return res.status(400).json({ error: 'Need from, to and a WAV clip' });
+    const t0 = Date.now();
+    try {
+      const text = await pipeline.transcribe(Buffer.from(req.body), from);
+      if (!text) return res.status(422).json({ error: "Didn't catch that, try again" });
+      const translated = await pipeline.translate(text, from, to);
+      const audio = await pipeline.speak(translated, to, req.query.gender === 'female' ? 'female' : 'male');
+      res.json({ text, translated, audio: audio.toString('base64'), ms: Date.now() - t0 });
+    } catch (e) {
+      console.error(e);
+      res.status(502).json({ error: e instanceof Error ? e.message : String(e) });
+    }
+  });
   app.get('/health', (_req, res) => res.json({ ok: true, gnani: !!process.env.GNANI_KEY, translate: !!process.env.GEMINI_KEY }));
 
   const server = createServer(app);
@@ -108,6 +133,6 @@ export function createApp() {
 
 // Start when run directly (not when imported by tests).
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const port = Number(process.env.PORT) || 5000;
+  const port = Number(process.env.PORT) || 5050;
   createApp().listen(port, () => console.log(`Bhasha Bridge on http://localhost:${port}`));
 }

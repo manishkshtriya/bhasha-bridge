@@ -3,75 +3,158 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#14131a" />
+    <meta name="theme-color" content="#f5f0e6" />
+    <meta name="description" content="Speak Kannada, be heard in Hindi. A voice-to-voice translator for real conversations." />
     <title>Bhasha Bridge</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2712%27 cy=%2716%27 r=%2710%27 fill=%27%23FFC21A%27/%3E%3Ccircle cx=%2720%27 cy=%2716%27 r=%2710%27 fill=%27%237C83FF%27 fill-opacity=%27.85%27/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;600;800&family=Anek+Kannada:wght@400;600;800&family=Anek+Latin:wght@400;600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wdth,wght@75..125,300..800&family=Anek+Kannada:wdth,wght@75..125,300..800&family=Anek+Latin:wdth,wght@75..125,300..800&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2716%27 height=%2732%27 fill=%27%23F2B705%27/%3E%3Crect x=%2716%27 width=%2716%27 height=%2732%27 fill=%27%233B3FA8%27/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Join -->
-    <main id="join" class="screen">
-      <header class="brand">
-        <h1>Bhasha<br />Bridge</h1>
-        <p class="hello"><span class="kn">ನೀವು ಕನ್ನಡದಲ್ಲಿ ಮಾತಾಡಿ</span><span class="arrow">⟶</span><span class="hi">वो हिन्दी में सुनें</span></p>
-        <p class="lede">A live call translator. Each person speaks their own language and hears the other in theirs.</p>
-      </header>
+    <!-- ============ HOME ============ -->
+    <main id="home" class="screen">
+      <nav class="top">
+        <span class="logo"><i class="mark" aria-hidden="true"></i>Bhasha Bridge</span>
+      </nav>
 
-      <form id="joinForm" class="card" autocomplete="off">
-        <label for="name">Your name</label>
-        <input id="name" maxlength="24" placeholder="Manish" required />
+      <section class="hero">
+        <div class="duo" id="duo" aria-hidden="true">
+          <p class="w kn" id="heroKn">ನಮಸ್ಕಾರ</p>
+          <svg class="thread" viewBox="0 0 300 60" preserveAspectRatio="none"><path d="M6 8 C 110 8, 170 52, 294 52" pathLength="1" /></svg>
+          <p class="w hi" id="heroHi">नमस्ते</p>
+          <p class="gloss" id="gloss">“Hello”</p>
+        </div>
+        <h1>Speak in yours.<br /><em>Be heard in theirs.</em></h1>
+        <p class="lede">Kannada and Hindi, voice to voice, in natural Indian voices. No typing. No reading. Just talk.</p>
+      </section>
 
-        <span class="label" id="langLabel">I speak</span>
-        <div class="seg" role="radiogroup" aria-labelledby="langLabel">
-          <button type="button" role="radio" data-lang="kn-IN" class="lang kn on" aria-checked="true">ಕನ್ನಡ<small>Kannada</small></button>
-          <button type="button" role="radio" data-lang="hi-IN" class="lang hi" aria-checked="false">हिन्दी<small>Hindi</small></button>
+      <section class="modes">
+        <button class="mode" data-mode="face" type="button">
+          <span class="ico face" aria-hidden="true"><i></i><i></i></span>
+          <span class="txt"><b>Face to face</b><small>One phone between two people. Each of you gets your own side.</small></span>
+          <span class="go" aria-hidden="true">→</span>
+        </button>
+        <button class="mode" data-mode="call" type="button">
+          <span class="ico call" aria-hidden="true"><i></i><i></i></span>
+          <span class="txt"><b>Remote call</b><small>Send a link on WhatsApp. They join from their own phone.</small></span>
+          <span class="go" aria-hidden="true">→</span>
+        </button>
+      </section>
+
+      <p class="credit">Listens with <b>Gnani Prisma</b> · Speaks with <b>Gnani Timbre</b></p>
+    </main>
+
+    <!-- ============ CALL SETUP ============ -->
+    <main id="setup" class="screen" hidden>
+      <nav class="top">
+        <button class="icon back" type="button" data-back aria-label="Back">←</button>
+        <span class="logo small"><i class="mark" aria-hidden="true"></i>Remote call</span>
+        <span></span>
+      </nav>
+
+      <p class="invited" id="invited" hidden></p>
+      <h2 id="setupTitle">Who's calling?</h2>
+
+      <form id="setupForm" autocomplete="off">
+        <label class="field">
+          <span>Your name</span>
+          <input id="name" maxlength="24" placeholder="Manish" required />
+        </label>
+
+        <span class="fieldlabel">I speak</span>
+        <div class="tiles" role="radiogroup" aria-label="I speak">
+          <button type="button" role="radio" class="tile kn" data-lang="kn-IN"><b>ಕನ್ನಡ</b><small>Kannada</small></button>
+          <button type="button" role="radio" class="tile hi" data-lang="hi-IN"><b>हिन्दी</b><small>Hindi</small></button>
         </div>
 
-        <span class="label" id="voiceLabel">My translated voice</span>
-        <div class="seg small" role="radiogroup" aria-labelledby="voiceLabel">
-          <button type="button" role="radio" data-gender="male" class="gender on" aria-checked="true">Male</button>
-          <button type="button" role="radio" data-gender="female" class="gender" aria-checked="false">Female</button>
+        <span class="fieldlabel">They'll hear me as</span>
+        <div class="voices" role="radiogroup" aria-label="Translated voice">
+          <button type="button" role="radio" class="voice" data-gender="male"><b id="vMale">Deepak</b><small>male voice</small></button>
+          <button type="button" role="radio" class="voice" data-gender="female"><b id="vFemale">Nalini</b><small>female voice</small></button>
         </div>
 
-        <label for="room">Room code <small>(leave empty to start a new call)</small></label>
-        <input id="room" maxlength="8" placeholder="e.g. K7MQ2" autocapitalize="characters" />
-
-        <button class="primary" type="submit">Start the call</button>
-        <p class="fine">Records only while you hold the talk button.</p>
+        <button class="cta" type="submit" id="setupGo">Start the call</button>
+        <p class="fine">The mic records only while you hold the button.</p>
       </form>
     </main>
 
-    <!-- Call -->
+    <!-- ============ CALL ============ -->
     <main id="call" class="screen" hidden>
-      <header class="callbar">
-        <div>
-          <span class="roomlabel">Room</span>
-          <strong id="roomCode">—</strong>
-        </div>
-        <button id="share" class="ghost" type="button">Invite</button>
-      </header>
-      <ul id="peers" class="peers" aria-label="People in this call"></ul>
+      <nav class="top">
+        <button class="icon" type="button" id="leave" aria-label="Leave call">←</button>
+        <span class="room">Room <b id="roomCode">—</b></span>
+        <button class="chip" type="button" id="inviteBtn">+ Invite</button>
+      </nav>
+      <ul class="people" id="people" aria-label="People in this call"></ul>
 
-      <section id="log" class="log" aria-live="polite">
-        <p class="empty" id="empty">Share the room code. When the other person joins, hold the button and speak.</p>
+      <section class="log" id="log" aria-live="polite">
+        <div class="empty" id="empty">
+          <div class="waiting"><i></i><i></i><i></i></div>
+          <p id="emptyText">Waiting for the other person to join…</p>
+        </div>
       </section>
 
-      <p id="status" class="status" role="status"></p>
-
-      <footer class="talk">
-        <button id="talk" class="talkbtn" type="button" aria-label="Hold to talk">
-          <span class="ring" aria-hidden="true"></span>
-          <span class="label" id="talkLabel">Hold to talk</span>
-          <span class="timer" id="timer" aria-hidden="true"></span>
+      <footer class="dock">
+        <p class="status" id="status" role="status"></p>
+        <button class="orb" id="talk" type="button" aria-label="Hold to talk" disabled>
+          <span class="rings" aria-hidden="true"><i></i><i></i><i></i></span><span class="drop" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" /></svg>
         </button>
+        <p class="hint" id="talkHint">Hold to talk</p>
       </footer>
     </main>
+
+    <!-- ============ FACE TO FACE ============ -->
+    <main id="face" class="screen" hidden>
+      <section class="half top" id="halfTop"></section>
+      <div class="seam">
+        <button class="icon" type="button" data-back aria-label="Back">✕</button>
+        <span class="seamline"></span>
+        <button class="icon" type="button" id="swap" aria-label="Swap sides">⇅</button>
+      </div>
+      <section class="half bottom" id="halfBottom"></section>
+    </main>
+
+    <template id="halfTpl">
+      <div class="said">
+        <p class="big"></p>
+        <p class="small"></p>
+      </div>
+      <div class="me">
+        <button class="orb" type="button">
+          <span class="rings" aria-hidden="true"><i></i><i></i><i></i></span><span class="drop" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" /></svg>
+        </button>
+        <div class="meta">
+          <b class="lname"></b>
+          <button class="vchip" type="button"></button>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ INVITE SHEET ============ -->
+    <dialog id="invite" class="sheet">
+      <form method="dialog" class="sheetin">
+        <button class="icon close" value="close" aria-label="Close">✕</button>
+        <h3>Bring them in</h3>
+        <p class="sub">They open the link on their phone, pick their language and you're connected. Nothing to install.</p>
+        <div class="qr"><img id="qr" alt="QR code for the invite link" width="168" height="168" /></div>
+        <p class="sub center">Sitting nearby? Let them scan this.</p>
+        <a class="cta wa" id="waShare" target="_blank" rel="noopener">Send on WhatsApp</a>
+        <div class="row">
+          <button class="ghostbtn" type="button" id="copyLink">Copy link</button>
+          <button class="ghostbtn" type="button" id="moreShare">More…</button>
+        </div>
+        <p class="code">or tell them the room code <b id="inviteCode"></b></p>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" hidden></div>
 
     <script type="module" src="app.js"></script>
   </body>

@@ -8,6 +8,11 @@ A live call translator for India. Two people who don't share a language join the
 
 A Kannada-speaking auto driver and a Hindi-speaking passenger, a Bengaluru shop owner and a customer from Bihar, a grandmother in Mysuru and her new relatives in Lucknow: millions of conversations in India break down every day because two people don't share a language. Text translation apps make people type and read in the middle of a conversation. Bhasha Bridge lets them just talk.
 
+## Two ways to use it
+
+- **Face to face**: one phone on the table between two people. The screen splits in half, the far half upside down, so each person has their own side, their own button and reads in their own script. Good for a shop counter, an auto ride or a doctor's desk.
+- **Remote call**: start a room and send the link on WhatsApp (or let them scan the QR). They open it, pick their language and you're talking. Nothing to install.
+
 ## How it works
 
 ```
@@ -35,10 +40,10 @@ Needs Node 20 or newer.
 cd server
 cp .env.example .env      # add GNANI_KEY and GEMINI_KEY
 npm install
-npm start                 # http://localhost:5000
+npm start                 # http://localhost:5050
 ```
 
-Open the page on two phones (or two browser windows), start a call on one, and join with the room code or the Invite link on the other. Microphone access needs `https` or `localhost`.
+Try **Face to face** on one device, or start a **Remote call** and open the invite link in a second window or phone. Microphone access needs `https` or `localhost`.
 
 Tests (no keys needed, Gnani and translation are stubbed):
 
@@ -54,7 +59,7 @@ npm test
 
 ```
 server/
-  server.js          HTTP + WebSocket rooms, the speak → hear pipeline
+  server.js          HTTP + WebSocket rooms, /api/turn for face to face, the speak → hear pipeline
   lib/gnani.js       Gnani Prisma (STT) and Timbre (TTS) clients
   lib/translate.js   spoken-style translation step
   lib/rooms.js       room membership, grouping listeners by language

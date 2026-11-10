@@ -120,3 +120,30 @@ test('translation asks for natural spoken target language and returns only the t
   assert.match(sent.contents[0].parts[0].text, /spoken Kannada into natural, everyday spoken Hindi/);
   assert.equal(await translate('same', 'hi-IN', 'hi-IN', fake), 'same');
 });
+
+test('face-to-face turn: one clip in, translated voice back', async () => {
+  const saved = { ...pipeline };
+  pipeline.transcribe = async (_buf, lang) => (lang === 'hi-IN' ? 'नमस्ते' : '');
+  pipeline.translate = async (text, from, to) => `${text}:${from}>${to}`;
+  pipeline.speak = async (_t, _l, gender) => Buffer.from(gender);
+  const server = createApp().listen(0);
+  const base = `http://localhost:${server.address().port}`;
+  try {
+    const ok = await fetch(`${base}/api/turn?from=hi-IN&to=kn-IN&gender=female`, { method: 'POST', body: new Uint8Array(100) });
+    const body = await ok.json();
+    assert.equal(body.text, 'नमस्ते');
+    assert.equal(body.translated, 'नमस्ते:hi-IN>kn-IN');
+    assert.equal(Buffer.from(body.audio, 'base64').toString(), 'female');
+
+    const silent = await fetch(`${base}/api/turn?from=kn-IN&to=hi-IN`, { method: 'POST', body: new Uint8Array(100) });
+    assert.equal(silent.status, 422);
+    const bad = await fetch(`${base}/api/turn?from=xx&to=hi-IN`, { method: 'POST', body: new Uint8Array(100) });
+    assert.equal(bad.status, 400);
+
+    const qr = await fetch(`${base}/api/qr?text=${encodeURIComponent('https://example.com/?room=AB12C')}`);
+    assert.match(await qr.text(), /<svg/);
+  } finally {
+    Object.assign(pipeline, saved);
+    server.close();
+  }
+});
